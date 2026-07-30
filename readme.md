@@ -17,4 +17,40 @@
 | Request Handling       | Blocks until request completes                                            | Can pause one request while waiting and serve others                       |
 | Best Use Cases         | Traditional CRUD web apps                                                 | APIs, chat apps, streaming, real-time systems, microservices               |
 
-- What is path variable and what is Query Parameter? 
+- What is path variable and what is Query Parameters? 
+- Path Variable- A Path Parameter (also called a Path Variable) is a value that is part of the URL path.
+In short- Identifies which resource you want.
+
+* eg. i want user_id 10 result
+     @app.get("/users/{user_id}")   
+     def get_user(user_id:int):
+        return user_id
+    
+    Here the {user_id} in url - GET /users/10 
+
+
+* What is query parameter?
+- Query Parameter comes after the question mark (?) in the URL.
+  It is not used to identify the resource. Instead, it changes or filters the response.
+
+  eg. 
+  @app.get("/users/{user_id}")
+  def get_user(user_id: int, details: bool = False):
+    return {
+        "user_id": user_id,
+        "details": details
+    }
+
+  Request- GET /users/10?details=true
+
+### Difference between Path Parameter Vs Query Parameter
+
+  | Feature         | Path Parameter                                             | Query Parameter                                           |
+| --------------- | ---------------------------------------------------------- | --------------------------------------------------------- |
+| Position        | Inside the URL path                                        | After `?` in the URL                                      |
+| Purpose         | Identify a specific resource                               | Filter, search, sort, paginate, or customize the response |
+| Required        | Usually yes                                                | Usually optional                                          |
+| Syntax          | `/users/10`                                                | `/users?page=2`                                           |
+| Multiple Values | Multiple path segments are possible (`/users/10/orders/5`) | Multiple parameters separated by `&` (`?page=2&limit=10`) |
+| Used For        | IDs, names, unique resources                               | Filters, search, sorting, pagination                      |
+| Example         | `/employees/101`                                           | `/employees?department=IT`                                |
