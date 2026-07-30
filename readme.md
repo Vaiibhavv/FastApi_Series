@@ -16,3 +16,5 @@
 | Framework Examples     | Flask, Pyramid, older Django                                              | FastAPI, Starlette, Quart, modern Django (ASGI mode)                       |
 | Request Handling       | Blocks until request completes                                            | Can pause one request while waiting and serve others                       |
 | Best Use Cases         | Traditional CRUD web apps                                                 | APIs, chat apps, streaming, real-time systems, microservices               |
+
+- What is path variable and what is Query Parameter? 
