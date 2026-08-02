@@ -54,3 +54,25 @@ In short- Identifies which resource you want.
 | Multiple Values | Multiple path segments are possible (`/users/10/orders/5`) | Multiple parameters separated by `&` (`?page=2&limit=10`) |
 | Used For        | IDs, names, unique resources                               | Filters, search, sorting, pagination                      |
 | Example         | `/employees/101`                                           | `/employees?department=IT`                                |
+
+
+### What is Response Model ?
+A response_model is a Pydantic model that defines the structure of the response returned by your API.
+
+Think of it as a contract between your API and its consumers.
+
+It tells FastAPI:
+
+"No matter what my function returns internally, only return data that matches this model."
+
+### what is ORM (Object Relational Mapping)?
+
+## What is SQLModel, SQLAlchemy? 
+
+
+SQL Injection
+SQL injection is a code injection technique that can destroy your database. SQL injections are a common web hacking technique.
+
+SQL injections are when attackers insert malicious SQL code into user-input fields, and this way can read, modify, or delete sensitive data in a database.
+
+SQL injections usually occur when you ask a user for input, like username/userid, and instead of giving a name/id, the attacker inserts an SQL command that executes something in your database.
