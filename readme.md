@@ -153,4 +153,4 @@ Allow Access
 
 
 ### Fastapi Theory Last Minute Content
-@[text](https://chatgpt.com/share/6a70e5b3-a840-83ee-b1e1-b4b17ff8ec1f)
+@[FastAPI Resource](https://chatgpt.com/share/6a70e5b3-a840-83ee-b1e1-b4b17ff8ec1f)
