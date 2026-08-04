@@ -51,9 +51,9 @@ async def login_credential(form_data:Annotated[OAuth2PasswordRequestForm, Depend
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Wrong Credentials")
 
     data = {
-        'sub': user_cred.email,
+        'sub': user_cred.username,
         'id': user_cred.id,
-        'name': user_cred.username
+        'name': user_cred.email
     }
 
     token_dict=await check_jwt_token(data,timedelta(15))

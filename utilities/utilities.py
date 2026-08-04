@@ -1,11 +1,14 @@
 
+from typing import Annotated
+
 from pwdlib import PasswordHash
 from sqlmodel import select
 from database.db import SessionDependency
 from models.userModel import User
-from fastapi import HTTPException,status
+from fastapi import Depends, HTTPException,status
 from datetime import datetime, timedelta,timezone
-from jose import jwt
+from jose import JWTError, jwt
+from fastapi.security import OAuth2PasswordBearer
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -56,6 +59,20 @@ async def check_jwt_token(data:dict,expiry_time:timedelta):
 
     return {"access_token": access_token, "token_type": "bearer"}
 
+async def decode_paylod(token):
+    try:
+        payload=jwt.decode(token,key=JWT_SECRET,algorithms=JWT_ALGORITHM)
+        return payload
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Unauthorize Jwt token")
 
-        
+outh_2bearer=OAuth2PasswordBearer(tokenUrl="/auth/userlogin") # it requires the login endpoint for validate 
+async def validate_token(token:Annotated[str,Depends(outh_2bearer)]):
 
+    ## to validate the token first we ned to decode it
+    payload = await decode_paylod(token)
+
+    subject = payload.get("sub")
+    if subject is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Validate nhi ho rha")
+    return payload
