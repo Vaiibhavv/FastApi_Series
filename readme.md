@@ -121,35 +121,9 @@ It Merges Files: It tells your main FastAPI application, "Hey, I wrote a bunch o
 
 3. Signature: Built by hashing the header, payload, and a secret key known only to your backend to prevent tamperin
 
-* Complet JWT Flow 
+* Complete JWT Flow 
 
-User
- |
- | Login
- |
-FastAPI
- |
- | Verify credentials
- |
-Database
- |
- | User valid
- |
-Generate JWT
- |
-Return JWT
- |
-User stores JWT
- |
-Authorization: Bearer <JWT>
- |
-FastAPI
- |
-Verify Signature
- |
-Read Payload
- |
-Allow Access
+![alt text](image-2.png)
 
 
 ### Fastapi Theory Last Minute Content

@@ -1,32 +1,28 @@
-from fastapi import APIRouter,status,HTTPException
+from fastapi import APIRouter,status,HTTPException,Depends
 from models.userModel import User
 from response_model.userResponse import UserResponse
 from request_model.userReq import UserReq
 from database.db import SessionDependency
 from sqlmodel import select
-from pwdlib import PasswordHash
+from fastapi.security import OAuth2PasswordRequestForm
+from typing import Annotated
 
 
-
-user_router=APIRouter(tags=['Users'])
+user_router=APIRouter(tags=['Users'],prefix="/auth")
 
 ## encrypt the password
+from utilities.utilities import check_credentials, hash_password
+# 
 
-# Initialize PasswordHash with Argon2 (recommended)
-password_context = PasswordHash.recommended()
 
-def hash_password(password: str) -> str:
-    """Generates a secure hash from a plain text password."""
-    return password_context.hash(password)
-
-@user_router.get("/auth/users",response_model=list[UserResponse],status_code=status.HTTP_200_OK)
-def alluser(session:SessionDependency):
+@user_router.get("/users",response_model=list[UserResponse],status_code=status.HTTP_200_OK)
+async def alluser(session:SessionDependency):
     query=select(User)
     return session.exec(query).all()
 
 ## create a user 
-@user_router.post("/auth/create_user",response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def create_user(userReq:UserReq,session:SessionDependency):
+@user_router.post("/create_user",response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+async def create_user(userReq:UserReq,session:SessionDependency):
     """ while creating the user , first we need to check if the user already exist or not, b
     based on the email """
     user=User.model_validate(userReq)
@@ -41,3 +37,15 @@ def create_user(userReq:UserReq,session:SessionDependency):
     session.commit()
     session.refresh(user)
     return user
+
+## login the existing user
+@user_router.post("/userlogin")
+async def login_credential(form_data:Annotated[OAuth2PasswordRequestForm, Depends()],session:SessionDependency):
+    username=form_data.username
+    password=form_data.password
+
+    ## check if the username,email is present or not in db 
+    user_cred= await check_credentials(username,password,session)
+    if not user_cred:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Wrong Credentials")
+
