@@ -6,12 +6,13 @@ from database.db import SessionDependency
 from sqlmodel import select
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
+from datetime import timedelta
 
 
 user_router=APIRouter(tags=['Users'],prefix="/auth")
 
 ## encrypt the password
-from utilities.utilities import check_credentials, hash_password
+from utilities.utilities import check_credentials, check_jwt_token, hash_password
 # 
 
 
@@ -49,3 +50,12 @@ async def login_credential(form_data:Annotated[OAuth2PasswordRequestForm, Depend
     if not user_cred:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Wrong Credentials")
 
+    data = {
+        'sub': user_cred.email,
+        'id': user_cred.id,
+        'name': user_cred.username
+    }
+
+    token_dict=await check_jwt_token(data,timedelta(15))
+
+    return token_dict
